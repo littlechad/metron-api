@@ -1,0 +1,21 @@
+FROM node:10-alpine
+
+RUN apk add --no-cache --virtual .gyp \
+    build-base \
+    python \
+    make \
+    g++ \
+    cairo-dev
+
+RUN yarn global add nodemon
+
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock /usr/src/app/
+
+RUN yarn install &&\
+  yarn cache clean
+
+COPY . /usr/src/app
+
+CMD ["yarn", "start"]
